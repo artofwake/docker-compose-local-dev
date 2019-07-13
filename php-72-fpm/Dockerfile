@@ -9,3 +9,6 @@ RUN apt install -y libmagickwand-dev --no-install-recommends && \
 
 RUN pecl install xdebug-2.7.1 && docker-php-ext-enable xdebug
 ADD ./php.ini /usr/local/etc/php/php.ini
+
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get install -y nodejs
