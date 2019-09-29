@@ -12,7 +12,7 @@ services:
       - "${HOME_SERVER_FOLDER}/logs:/var/www/logs"
       - "${HOME_SERVER_FOLDER}:/var/www"
     links:
-      - php-7.1
+      - php-7.2
     networks:
       - internal
   db:
