@@ -1,0 +1,45 @@
+version: '3.1'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_worker
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - "${DOCKER_FOLDER}/nginx/config:/etc/nginx/conf.d"
+      - "${HOME_SERVER_FOLDER}/logs:/var/www/logs"
+      - "${HOME_SERVER_FOLDER}:/var/www"
+    links:
+      - php-7.1
+    networks:
+      - internal
+  db:
+    container_name: db_worker
+    restart: always
+    image: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: codexdb
+    networks:
+      - internal
+  php-7.2:
+    container_name: php_72_worker
+    image: artwake/php-7.2
+    volumes:
+      - "${HOME_SERVER_FOLDER}:/var/www"
+    links:
+      - db
+    networks:
+      - internal
+networks:
+  internal:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.220.0/28
