@@ -9,6 +9,7 @@ services:
       - 443:443
     volumes:
       - "${DOCKER_FOLDER}/nginx/config:/etc/nginx/conf.d"
+      - "${DOCKER_FOLDER}/nginx/include:/etc/nginx/include"
       - "${HOME_SERVER_FOLDER}/logs:/var/www/logs"
       - "${HOME_SERVER_FOLDER}:/var/www"
     links:
