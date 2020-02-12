@@ -13,10 +13,12 @@ services:
       - "${HOME_SERVER_FOLDER}/logs:/var/www/logs"
       - "${HOME_SERVER_FOLDER}/logs/nginx:/var/www/logs/nginx"
       - "${HOME_SERVER_FOLDER}:/var/www"
+      - "${DOCKER_FOLDER}/share:/share"
     links:
       - php-7.2
     networks:
-      - internal
+      internal:
+        ipv4_address: 192.168.220.6
   db:
     container_name: db_worker
     restart: always
@@ -31,6 +33,26 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 'password'
       MYSQL_DATABASE: 'codexdb'
+    volumes:
+      - "${DOCKER_FOLDER}/share:/share"
+    networks:
+      - internal
+  db_5_7:
+    container_name: db_57_worker
+    restart: always
+    image: mysql:5.7
+    command: [
+      '--character-set-server=utf8',
+      '--collation-server=utf8_general_ci',
+      '--default-authentication-plugin=mysql_native_password'
+    ]
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_DATABASE: 'codexdb'
+    volumes:
+      - "${DOCKER_FOLDER}/share:/share"
     networks:
       - internal
   php-7.2:
@@ -38,8 +60,13 @@ services:
     image: artwake/php-7.2
     volumes:
       - "${HOME_SERVER_FOLDER}:/var/www"
+      - "${DOCKER_FOLDER}/share:/share"
+    environment:
+      XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1"
+      PHP_IDE_CONFIG: "serverName=Docker"
     links:
       - db
+      - db_5_7
       - redis
     networks:
       - internal
@@ -48,6 +75,8 @@ services:
     image: redis
     ports:
       - 6379:6379
+    volumes:
+      - "${DOCKER_FOLDER}/share:/share"
     networks:
       - internal
 networks:
