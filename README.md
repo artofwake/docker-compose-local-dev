@@ -7,9 +7,9 @@
 6. docker-compose up -d
 
 # Site base by yii2 (advanced template)
-create ~/server/local/yii2-advanced.ddk/example/frontend/web/index.php
-add to hosts example.yii2-advanced.ddk
-see site :)
+1. create ~/server/local/yii2-advanced.ddk/example/frontend/web/index.php 
+2. add to hosts example.yii2-advanced.ddk \
+3. see site :) \
 
 # yii2 basic template
 put basic project to frontend folder in your site.
