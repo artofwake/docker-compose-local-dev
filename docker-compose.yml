@@ -5,20 +5,20 @@ services:
     image: nginx:latest
     container_name: nginx_worker
     ports:
-      - 80:80
+      - 81:80
       - 443:443
     volumes:
       - "${DOCKER_FOLDER}/nginx/config:/etc/nginx/conf.d"
       - "${DOCKER_FOLDER}/nginx/include:/etc/nginx/include"
       - "${HOME_SERVER_FOLDER}/logs:/var/www/logs"
       - "${HOME_SERVER_FOLDER}/logs/nginx:/var/www/logs/nginx"
-      - "${HOME_SERVER_FOLDER}:/var/www"
+      - "${HOME_SERVER_FOLDER}:/var/www:cached"
       - "${DOCKER_FOLDER}/share:/share"
     links:
       - php-7.2
     networks:
       internal:
-        ipv4_address: 192.168.220.6
+        ipv4_address: 192.168.220.7
   db:
     container_name: db_worker
     restart: always
@@ -59,7 +59,7 @@ services:
     container_name: php_72_worker
     image: artwake/php-7.2
     volumes:
-      - "${HOME_SERVER_FOLDER}:/var/www"
+      - "${HOME_SERVER_FOLDER}:/var/www:cached"
       - "${DOCKER_FOLDER}/share:/share"
     environment:
       XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1"
